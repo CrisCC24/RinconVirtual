@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuestros Momentos - Yazmín</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --rosa-oscuro: #c2185b;
+            --rosa-claro: #f8bbd0;
+            --dorado: #ffd700;
+            --crema: #fff5f5;
+            --negro-suave: #1a1a1a;
+        }
+        
+        body {
+            font-family: 'Playfair Display', serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--negro-suave);
+            color: #fff;
+            background-image: url('https://images.unsplash.com/photo-1490730141103-6cac27aaab94?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            overflow-x: hidden;
+        }
+        
+        .overlay {
+            background-color: rgba(26, 26, 26, 0.85);
+            min-height: 100vh;
+            padding: 3rem 1rem;
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4.5rem;
+            color: var(--dorado);
+            text-align: center;
+            margin: 1rem 0;
+            text-shadow: 0 0 15px rgba(194, 24, 91, 0.5);
+            position: relative;
+        }
+        
+        h1::after {
+            content: "";
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--rosa-oscuro), transparent);
+        }
+        
+        .subtitle {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            text-align: center;
+            margin: 1rem auto 3rem;
+            color: var(--rosa-claro);
+            max-width: 600px;
+        }
+        
+        .album-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+        
+        .photo-frame {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            aspect-ratio: 1/1;
+            background: var(--negro-suave);
+        }
+        
+        .photo-frame:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(194, 24, 91, 0.6);
+        }
+        
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .photo-frame:hover img {
+            opacity: 0.7;
+            transform: scale(1.1);
+        }
+        
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(194, 24, 91, 0.9), transparent);
+            color: white;
+            padding: 2rem 1rem 1rem;
+            transform: translateY(100%);
+            transition: all 0.3s ease;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.4rem;
+            text-align: center;
+        }
+        
+        .photo-frame:hover .photo-caption {
+            transform: translateY(0);
+        }
+        
+        .memory-date {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 215, 0, 0.9);
+            color: var(--rosa-oscuro);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s ease 0.1s;
+        }
+        
+        .photo-frame:hover .memory-date {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Efecto de polaroid para algunas fotos */
+        .polaroid {
+            background: var(--crema);
+            padding: 1rem 1rem 3rem;
+            transform: rotate(5deg);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .polaroid:nth-child(4n+2) {
+            transform: rotate(-3deg);
+        }
+        
+        .polaroid:nth-child(3n+3) {
+            transform: rotate(7deg);
+        }
+        
+        .polaroid:hover {
+            transform: rotate(0deg) translateY(-10px) scale(1.03);
+        }
+        
+        .polaroid .photo-caption {
+            color: var(--negro-suave);
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            text-align: left;
+            padding-top: 1rem;
+            background: none;
+        }
+        
+        /* Efecto de corazones flotantes */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .heart {
+            position: absolute;
+            color: var(--rosa-oscuro);
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: float 8s linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Botón de regreso */
+        .back-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--rosa-oscuro);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 100;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .back-button:hover {
+            transform: scale(1.1) translateY(-5px);
+            background: var(--dorado);
+            color: var(--rosa-oscuro);
+        }
+        
+        /* Efecto de luz en fotos */
+        .photo-frame::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at var(--x) var(--y), 
+                      transparent 10%, 
+                      rgba(255, 215, 0, 0.1) 20%, 
+                      transparent 30%);
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .photo-frame:hover::before {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="floating-hearts" id="hearts-container"></div>
+        
+        <h1 class="animate__animated animate__fadeInDown">Nuestros Momentos</h1>
+        <div class="subtitle animate__animated animate__fadeIn animate__delay-1s">
+            Cada foto es un tesoro que guardo en mi corazón
+        </div>
+        
+        <div class="album-container">
+            <!-- Foto 1 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="1.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 2 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="2.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 3 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="3.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 4 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="4.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 5 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="5.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 6 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="6.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 7 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="7.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 8 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="8.JPG" alt="Nuestro primer día">
+            </div>
+            
+             <!-- Foto 1 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="9.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 2 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="10.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 3 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="11.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 4 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="12.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 5 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="13.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 6 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="14.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 7 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="15.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 8 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="16.JPG" alt="Nuestro primer día">
+            </div>
+
+              <!-- Foto 7 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="17.JPG" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 8 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="18.JPG" alt="Nuestro primer día">
+            </div>
+
+            <!-- Foto 7 - Polaroid -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="19.jpg" alt="Nuestro primer día">
+            </div>
+            
+            <!-- Foto 8 -->
+            <div class="photo-frame polaroid animate__animated animate__fadeIn">
+                <img src="20.jpg" alt="Nuestro primer día">
+            </div>
+            <!-- Añade más fotos según necesites -->
+        </div>
+        
+        <button class="back-button" onclick="window.location.href='index.html'">←</button>
+    </div>
+
+    <script>
+        // Crear corazones flotantes
+        function createHearts() {
+            const container = document.getElementById('hearts-container');
+            const heartCount = 20;
+            
+            for (let i = 0; i < heartCount; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '♥';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 6 + 4) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+            }
+        }
+        
+        // Efecto de luz que sigue el mouse en las fotos
+        document.querySelectorAll('.photo-frame').forEach(frame => {
+            frame.addEventListener('mousemove', (e) => {
+                const rect = frame.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                frame.style.setProperty('--x', x + 'px');
+                frame.style.setProperty('--y', y + 'px');
+            });
+        });
+        
+        // Inicialización
+        window.onload = function() {
+            createHearts();
+            
+            // Efecto de aparición escalonada para las fotos
+            const frames = document.querySelectorAll('.photo-frame');
+            frames.forEach((frame, index) => {
+                frame.style.animationDelay = `${index * 0.2}s`;
+            });
+        };
+    </script>
+</body>
+</html>

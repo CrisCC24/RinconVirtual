@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Razones por las que te Amo ❤️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@400;600&display=swap');
+        
+        :root {
+            --day-bg: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            --night-bg: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --text-day: #333;
+            --text-night: #fff;
+            --card-day: rgba(255, 255, 255, 0.9);
+            --card-night: rgba(40, 40, 80, 0.8);
+        }
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+            transition: background 1s;
+            background: var(--day-bg);
+            color: var(--text-day);
+        }
+        
+        body.night-mode {
+            background: var(--night-bg);
+            color: var(--text-night);
+        }
+        
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5em;
+            margin: 20px 0;
+            color: #d23669;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .razon-card {
+            background: var(--card-day);
+            border-radius: 15px;
+            width: 160px;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(210, 54, 105, 0.3);
+        }
+        
+        .night-mode .razon-card {
+            background: var(--card-night);
+            border: 2px solid rgba(255, 105, 180, 0.3);
+        }
+        
+        .razon-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 8px 16px rgba(210, 54, 105, 0.3);
+        }
+        
+        .razon-card .number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #d23669;
+            transition: all 0.4s;
+        }
+        
+        .night-mode .razon-card .number {
+            color: #ff6b9e;
+        }
+        
+        .razon-card .text {
+            position: absolute;
+            opacity: 0;
+            padding: 15px;
+            font-size: 0.95em;
+            color: var(--text-day);
+            transition: all 0.4s;
+            transform: scale(0.8);
+        }
+        
+        .night-mode .razon-card .text {
+            color: var(--text-night);
+        }
+        
+        .razon-card.active .number {
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .razon-card.active .text {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Animaciones */
+        .heart, .star {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0;
+            animation: float 6s ease-in-out infinite;
+            font-size: 24px;
+        }
+        
+        .star {
+            animation: float 8s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        /* Mensaje final */
+        .final-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(210, 54, 105, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            animation: fadeIn 1s;
+        }
+        
+        .final-message h2 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .final-message p {
+            font-size: 1.5em;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        .close-btn {
+            background: white;
+            color: #d23669;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Fuegos artificiales */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px;
+            animation: explode 1s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes explode {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <h1>100 Razones por las que te Amo ❤️</h1>
+    
+    <div class="container" id="container">
+        <!-- Las tarjetas se generarán con JavaScript -->
+    </div>
+    
+    <div class="final-message" id="finalMessage">
+        <h2>¡Eres el amor de mi vida!</h2>
+        <p>Estas 100 razones son solo el comienzo... Cada día descubro más motivos para amarte.</p>
+        <button class="close-btn" id="closeBtn">Cerrar</button>
+    </div>
+    
+    <script>
+        // Lista completa de 100 razones (¡personalízalas!)
+        const razones = [
+             "1. Por tu sonrisa que ilumina mis días",
+            "2. Por cómo me haces sentir cuando estoy contigo",
+            "3. Por tu risa contagiosa que alegra mi corazón",
+            "4. Por tu paciencia cuando más lo necesito",
+            "5. Por los pequeños detalles que nadie más nota",
+            "6. Porque me aceptas tal y como soy",
+            "7. Por tu honestidad en cada momento",
+            "8. Por tu forma única de ver la vida",
+            "9. Por cómo me abrazas cuando más lo necesito",
+            "10. Porque contigo el tiempo vuela",
+            "11. Por tus ojos que dicen más que mil palabras",
+            "12. Por tu valentía ante las adversidades",
+            "13. Por cómo me haces reír sin intentarlo",
+            "14. Por tu generosidad sin límites",
+            "15. Porque me haces sentir el amor más puro",
+            "16. Por tus locuras que me enamoran",
+            "17. Por cómo me miras cuando crees que no me doy cuenta",
+            "18. Por tu voz que calma mis tormentas",
+            "19. Porque eres mi mejor consejero",
+            "20. Por cómo celebras mis logros",
+            "21. Por tu capacidad de perdonar",
+            "22. Por tu inteligencia que me inspira",
+            "23. Por tu calidez en los días fríos",
+            "24. Por cómo me proteges sin sobreprotegerme",
+            "25. Porque me haces sentir seguro",
+            "26. Por tu pasión por las cosas que amas",
+            "27. Por tu forma tierna de decir mi nombre",
+            "28. Por cómo me sorprendes constantemente",
+            "29. Por tu dedicación a nuestra relación",
+            "30. Porque me enseñas algo nuevo cada día",
+            "31. Por tu optimismo en los momentos difíciles",
+            "32. Por tu creatividad para solucionar problemas",
+            "33. Por cómo me cuidas",
+            "34. Por tu apoyo incondicional a mis sueños",
+            "35. Porque me haces sentir especial cada día",
+            "36. Por tu forma única de amar",
+            "37. Por cómo me entiendes sin palabras",
+            "38. Por tu compromiso con nuestro amor",
+            "39. Por tu valentía al amar sin miedo",
+            "40. Porque me haces mejor persona",
+            "41. Por tu capacidad de escuchar",
+            "42. Por tu humor que combina perfecto con el mío",
+            "43. Por cómo me haces sentir en casa dondequiera que estemos",
+            "44. Por tu lealtad que nunca cuestiono",
+            "45. Porque me conoces mejor que nadie",
+            "46. Por tu sonrisa cuando me ves llegar",
+            "47. Por cómo me haces sentir amado",
+            "48. Por tu ternura en los pequeños gestos",
+            "49. Porque contigo todo es más bonito",
+            "50. Por tu forma de hacerme sentir único",
+            "51. Por cómo me abrazas después de un mal día",
+            "52. Por tu capacidad de sorprenderme",
+            "53. Por tu fuerza cuando las cosas se ponen difíciles",
+            "54. Porque me haces creer en el amor verdadero",
+            "55. Por tu dedicación a hacerme feliz",
+            "56. Por cómo me miras a los ojos",
+            "57. Por tu forma de calmarme cuando estoy ansioso",
+            "58. Porque me eliges todos los días",
+            "59. Por tu capacidad de amar profundamente",
+            "60. Por cómo transformas mis días grises",
+            "61. Por tu honestidad incluso cuando duele",
+            "62. Por tu apoyo en mis decisiones",
+            "63. Porque me haces sentir que pertenezco",
+            "64. Por tu paciencia con mis defectos",
+            "65. Por cómo me haces sentir completo",
+            "66. Por tu forma de decir 'te amo' sin palabras",
+            "67. Por tu capacidad de perdonar mis errores",
+            "68. Porque me haces sentir que puedo lograr cualquier cosa",
+            "69. Por tu sonrisa apenas despiertas",
+            "70. Por cómo me haces sentir protegido",
+            "71. Por tu forma de cuidar de mí",
+            "72. Porque me haces reír cuando más lo necesito",
+            "73. Por tu capacidad de ver lo mejor en mí",
+            "74. Por cómo me haces sentir en paz",
+            "75. Por tu amor incondicional",
+            "76. Porque me haces sentir que el mundo es mejor",
+            "77. Por tu forma de entender mis silencios",
+            "78. Por tu dedicación a nuestro futuro",
+            "79. Por cómo me haces sentir valioso",
+            "80. Por tu capacidad de sorprenderme cada día",
+            "81. Porque me haces sentir que soy suficiente",
+            "82. Por tu forma de amar sin condiciones",
+            "83. Por tu compromiso con mi felicidad",
+            "84. Por cómo me haces sentir especial",
+            "85. Por tu capacidad de hacerme sentir amado",
+            "86. Porque me haces sentir que todo es posible",
+            "87. Por tu forma de celebrar nuestro amor",
+            "88. Por tu paciencia con mis cambios de humor",
+            "89. Por cómo me haces sentir en casa",
+            "90. Por tu capacidad de amar mis imperfecciones",
+            "91. Porque me haces sentir que pertenezco a tu vida",
+            "92. Por tu forma de hacerme sentir seguro",
+            "93. Por tu dedicación a nuestra felicidad",
+            "94. Por cómo me haces sentir único",
+            "95. Por tu capacidad de alegrar mis días",
+            "96. Porque me haces sentir que el amor existe",
+            "97. Por tu forma de amar sin medida",
+            "98. Por tu compromiso con nuestro amor",
+            "99. Por cómo me haces sentir completo",
+            "100. Porque eres el amor de mi vida y mi razón para sonreír cada día"
+        ];
+
+        // Generar las tarjetas
+        const container = document.getElementById('container');
+        
+        razones.forEach((razon, index) => {
+            const card = document.createElement('div');
+            card.className = 'razon-card';
+            card.innerHTML = `
+                <div class="number">${index + 1}</div>
+                <div class="text">${razon.split('. ')[1]}</div>
+            `;
+            
+            card.addEventListener('click', () => {
+                card.classList.toggle('active');
+                createHearts(2);
+                if (Math.random() > 0.7) createStars(1);
+                
+                // Mostrar mensaje final al clickear la razón 100
+                if (index === 99) {
+                    document.getElementById('finalMessage').style.display = 'flex';
+                    createFireworks(30);
+                }
+            });
+            
+            container.appendChild(card);
+        });
+        
+        // Corazones flotantes
+        function createHearts(count) {
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                document.body.appendChild(heart);
+                
+                setTimeout(() => {
+                    heart.remove();
+                }, 6000);
+            }
+        }
+        
+        // Estrellas flotantes (modo noche)
+        function createStars(count) {
+            for (let i = 0; i < count; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.innerHTML = '✨';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.fontSize = (Math.random() * 15 + 10) + 'px';
+                star.style.animationDuration = (Math.random() * 6 + 4) + 's';
+                document.body.appendChild(star);
+                
+                setTimeout(() => {
+                    star.remove();
+                }, 8000);
+            }
+        }
+        
+        // Fuegos artificiales
+        function createFireworks(count) {
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * 100 + 'vw';
+                    firework.style.top = Math.random() * 100 + 'vh';
+                    firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                    firework.style.setProperty('--x', (Math.random() - 0.5) * 200 + 'px');
+                    firework.style.setProperty('--y', (Math.random() - 0.5) * 200 + 'px');
+                    document.body.appendChild(firework);
+                    
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+        
+        // Cerrar mensaje final
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            document.getElementById('finalMessage').style.display = 'none';
+        });
+        
+        // Modo noche automático (según la hora)
+        function updateDayNightMode() {
+            const hour = new Date().getHours();
+            if (hour >= 18 || hour <= 6) {
+                document.body.classList.add('night-mode');
+                createStars(15);
+            } else {
+                document.body.classList.remove('night-mode');
+            }
+        }
+        
+        // Inicialización
+        window.addEventListener('load', () => {
+            createHearts(20);
+            updateDayNightMode();
+            setInterval(updateDayNightMode, 60000); // Actualizar cada minuto
+        });
+    </script>
+</body>
+</html>

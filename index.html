@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Yazmín, con pasión</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=EB+Garamond:wght@500&family=Tangerine:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --vino: #6d0d3a;
+            --morado-oscuro: #3a0d3a;
+            --dorado: #d4af37;
+            --negro-elegante: #1a1a1a;
+            --bordo: #800020;
+            --rojo-pasion: #d23669;
+        }
+        
+        /* Estilos para la pantalla de bloqueo */
+        .lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(109, 13, 58, 0.95) 0%, rgba(58, 13, 58, 0.95) 100%);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'EB Garamond', serif;
+            backdrop-filter: blur(5px);
+            overflow-y: auto;
+        }
+        
+        .lock-container {
+            background: rgba(10, 5, 10, 0.9);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 2px solid var(--dorado);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            margin: 20px;
+        }
+        
+        .lock-title {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--dorado);
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+        
+        .lock-subtitle {
+            font-family: 'Tangerine', cursive;
+            font-size: 2rem;
+            color: var(--dorado);
+            margin-bottom: 2rem;
+        }
+        
+        .lock-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            text-align: left;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dorado);
+            font-size: 1.1rem;
+        }
+        
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--dorado);
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--rojo-pasion);
+            box-shadow: 0 0 10px rgba(210, 54, 105, 0.5);
+        }
+        
+        .select-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .select-option {
+            display: flex;
+            align-items: center;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .select-option:hover {
+            background: rgba(210, 54, 105, 0.2);
+        }
+        
+        .select-option input {
+            margin-right: 10px;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(135deg, var(--vino) 0%, var(--morado-oscuro) 100%);
+            color: white;
+            border: none;
+            padding: 1rem;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+            border: 1px solid var(--dorado);
+            font-family: 'Cinzel Decorative', cursive;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(135deg, var(--rojo-pasion) 0%, var(--vino) 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .error-message {
+            color: #ff6b6b;
+            margin-top: 1rem;
+            display: none;
+            font-style: italic;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* Estilos del contenido principal (los ocultamos inicialmente) */
+        .main-content {
+            display: none;
+        }
+
+        body {
+            font-family: 'EB Garamond', serif;
+            background-color: #0f0f0f;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            background-image: url('https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            color: #e0e0e0;
+            overflow-x: hidden;
+        }
+        
+        .overlay {
+            background-color: rgba(10, 5, 10, 0.88);
+            min-height: 100vh;
+            padding: 3rem 1rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 5rem;
+            color: var(--dorado);
+            margin: 1rem 0;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            letter-spacing: 2px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        h1::before, h1::after {
+            content: "♥";
+            color: var(--rojo-pasion);
+            margin: 0 15px;
+            font-size: 1.8rem;
+        }
+        
+        .subtitle {
+            font-family: 'Tangerine', cursive;
+            font-size: 3rem;
+            color: var(--dorado);
+            margin: 1rem auto 3rem;
+            max-width: 700px;
+            line-height: 1.3;
+            text-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+            animation: fadeInUp 1.5s ease-out;
+        }
+        
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .floating-element {
+            position: absolute;
+            opacity: 0;
+            font-size: 1.2rem;
+            color: var(--dorado);
+            animation: float 8s ease-in infinite;
+        }
+        
+        .programs-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 3rem auto;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .program-card {
+            position: relative;
+            width: 240px;
+            height: 220px;
+            background: linear-gradient(135deg, rgba(109, 13, 58, 0.9) 0%, rgba(58, 13, 58, 0.9) 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.6);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 1px solid var(--dorado);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .program-card::before {
+            content: "";
+            position: absolute;
+            top: -20px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(109, 13, 58, 0.9) 0%, rgba(58, 13, 58, 0.9) 100%);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .program-card::after {
+            content: "";
+            position: absolute;
+            top: -20px;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgba(109, 13, 58, 0.9) 0%, rgba(58, 13, 58, 0.9) 100%);
+            border-radius: 50%;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .program-card:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(109, 13, 58, 0.8);
+            border-color: var(--bordo);
+            background: linear-gradient(135deg, rgba(128, 0, 32, 0.9) 0%, rgba(109, 13, 58, 0.9) 100%);
+        }
+        
+        .program-card:hover::before,
+        .program-card:hover::after {
+            background: linear-gradient(135deg, rgba(128, 0, 32, 0.9) 0%, rgba(109, 13, 58, 0.9) 100%);
+        }
+        
+        .program-card h2 {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--dorado);
+            margin-top: 0;
+            font-weight: 400;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .program-card p {
+            color: #c0c0c0;
+            font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .program-icon {
+            font-size: 2.2rem;
+            color: var(--dorado);
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+        }
+        
+        .program-card:hover .program-icon {
+            transform: scale(1.2) rotate(-5deg);
+            text-shadow: 0 0 10px var(--dorado);
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.02); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.01); }
+            100% { transform: scale(1); }
+        }
+        
+        .program-card {
+            animation: heartbeat 5s infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-120px) rotate(15deg);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .constellations {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .star {
+            position: absolute;
+            background-color: var(--dorado);
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
+        
+        @keyframes twinkle {
+            0% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        
+        .gold-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gold-glow::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(212, 175, 55, 0) 0%,
+                rgba(212, 175, 55, 0.2) 50%,
+                rgba(212, 175, 55, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 6s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -60%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+        
+        .divider {
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--dorado), transparent);
+            margin: 2rem auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Pantalla de bloqueo -->
+    <div class="lock-screen" id="lockScreen">
+        <div class="lock-container">
+            <h1 class="lock-title">Para Yazmín</h1>
+            <p class="lock-subtitle">Responde estas preguntas para continuar...</p>
+            
+            <form class="lock-form" id="accessForm">
+                <div class="form-group">
+                    <label for="nombre">¿Cuál es tu nombre?</label>
+                    <input type="text" id="nombre" placeholder="Escribe tu nombre" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Dónde nos conocimos?</label>
+                    <div class="select-group">
+                        <label class="select-option">
+                            <input type="radio" name="lugar" value="officemax" required> OfficeMax
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="lugar" value="trabajo"> En un Bar
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="lugar" value="universidad"> La universidad
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="lugar" value="fiesta"> Una fiesta
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Qué fue el primer regalo que te di?</label>
+                    <div class="select-group">
+                        <label class="select-option">
+                            <input type="radio" name="regalo" value="chocolate" required> Chocolate
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="regalo" value="flores"> Flores
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="regalo" value="libro"> Un libro
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="regalo" value="joyeria"> Joyería
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>¿Qué fecha te lo di? (día y mes)</label>
+                    <div class="select-group">
+                        <label class="select-option">
+                            <input type="radio" name="fecha" value="10-junio" required> 10 de Junio
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="fecha" value="14-febrero"> 14 de Febrero
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="fecha" value="15-septiembre"> 15 de Septiembre
+                        </label>
+                        <label class="select-option">
+                            <input type="radio" name="fecha" value="12-diciembre"> 12 de Diciembre
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit" class="submit-btn">Entrar</button>
+                
+                <p class="error-message" id="errorMessage">Respuestas incorrectas. Intenta de nuevo.</p>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Contenido principal (oculto inicialmente) -->
+    <div class="main-content" id="mainContent">
+        <div class="overlay">
+            <div class="constellations" id="stars-container"></div>
+            <div class="floating-elements" id="floating-container"></div>
+            
+            <div class="gold-glow">
+                <h1 class="animate__animated animate__fadeInDown">Yazmín</h1>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="subtitle animate__animated animate__fadeIn animate__delay-1s">
+                Un rincón virtual lleno de todo lo que siento por ti...
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="programs-container">
+                <!-- Corazón que enlaza a tu programa especial -->
+                <div class="program-card animate__animated animate__fadeInUp animate__delay-1s" onclick="window.location.href='estrellas.html'">
+                    <div class="program-icon">🌠</div>
+                    <h2>Hasta las Estrellas</h2>
+                    <p>Un mensaje mandado del cielo</p>
+                </div>
+                
+                <div class="program-card animate__animated animate__fadeInUp animate__delay-1-2s" onclick="window.location.href='100razones.html'">
+                    <div class="program-icon">❤️</div>
+                    <h2>Porque te amo</h2>
+                    <p>Las Razones por las cual te amo tanto</p>
+                </div>
+                
+                <div class="program-card animate__animated animate__fadeInUp animate__delay-1-4s" onclick="window.location.href='100promesas.html'">
+                    <div class="program-icon">🫶🏽</div>
+                    <h2>Promesas</h2>
+                    <p>Estas son las promesas que te hago</p>
+                </div>
+                
+                <div class="program-card animate__animated animate__fadeInUp animate__delay-1-6s" onclick="window.location.href='NuestrosMomentos.html'">
+                    <div class="program-icon">📷</div>
+                    <h2>Nuestros Momentos</h2>
+                    <p>El viaje de nuestras almas entrelazadas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuración de respuestas correctas (más flexible)
+        const respuestasCorrectas = {
+            nombre: ["yazmin", "yazmín", "yaz"], // Variantes aceptadas para el nombre
+            lugar: "officemax", // Valor exacto esperado para el lugar
+            regalo: "chocolate", // Valor exacto esperado para el regalo
+            fecha: "10-junio" // Valor exacto esperado para la fecha
+        };
+
+        // Función para normalizar texto (quitar acentos, espacios, etc.)
+        function normalizarTexto(texto) {
+            return texto.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Elimina acentos
+                .trim();
+        }
+
+        // Función para validar el nombre (flexible)
+        function validarNombre(nombre) {
+            const normalizado = normalizarTexto(nombre);
+            return respuestasCorrectas.nombre.some(opcion => 
+                normalizado.includes(opcion) || opcion.includes(normalizado)
+            );
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById('accessForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Obtener respuestas del usuario
+            const nombre = document.getElementById('nombre').value;
+            const lugar = document.querySelector('input[name="lugar"]:checked')?.value;
+            const regalo = document.querySelector('input[name="regalo"]:checked')?.value;
+            const fecha = document.querySelector('input[name="fecha"]:checked')?.value;
+            
+            // Validar respuestas
+            const nombreValido = validarNombre(nombre);
+            const lugarValido = lugar === respuestasCorrectas.lugar;
+            const regaloValido = regalo === respuestasCorrectas.regalo;
+            const fechaValida = fecha === respuestasCorrectas.fecha;
+            
+            console.log("Validación:", {
+                nombre: { valor: nombre, valido: nombreValido },
+                lugar: { valor: lugar, valido: lugarValido },
+                regalo: { valor: regalo, valido: regaloValido },
+                fecha: { valor: fecha, valida: fechaValida }
+            });
+
+            if (nombreValido && lugarValido && regaloValido && fechaValida) {
+                // Respuestas correctas - ocultar pantalla de bloqueo
+                document.getElementById('lockScreen').classList.add('hidden');
+                document.getElementById('mainContent').style.display = 'block';
+                
+                // Inicializar contenido principal
+                initMainContent();
+                
+                // Guardar en localStorage para no pedir nuevamente
+                localStorage.setItem('accesoPermitido', 'true');
+            } else {
+                // Mostrar mensaje de error
+                const errorMessage = document.getElementById('errorMessage');
+                errorMessage.style.display = 'block';
+                
+                // Resaltar campos incorrectos
+                if (!nombreValido) document.getElementById('nombre').style.borderColor = 'red';
+                if (!lugarValido) document.querySelectorAll('input[name="lugar"]').forEach(el => el.parentElement.style.color = 'red');
+                if (!regaloValido) document.querySelectorAll('input[name="regalo"]').forEach(el => el.parentElement.style.color = 'red');
+                if (!fechaValida) document.querySelectorAll('input[name="fecha"]').forEach(el => el.parentElement.style.color = 'red');
+                
+                setTimeout(() => {
+                    errorMessage.style.display = 'none';
+                    // Restaurar colores originales
+                    document.getElementById('nombre').style.borderColor = '';
+                    document.querySelectorAll('.select-option').forEach(el => el.style.color = '');
+                }, 3000);
+            }
+        });
+
+        // Si ya accedió antes, no mostrar pantalla de bloqueo
+        if (localStorage.getItem('accesoPermitido') === 'true') {
+            document.getElementById('lockScreen').classList.add('hidden');
+            document.getElementById('mainContent').style.display = 'block';
+            initMainContent();
+        }
+
+        function initMainContent() {
+            createStars();
+            createFloatingElements();
+            
+            const subtitle = document.querySelector('.subtitle');
+            const originalText = subtitle.textContent;
+            subtitle.textContent = '';
+            
+            let i = 0;
+            const typingEffect = setInterval(() => {
+                if (i < originalText.length) {
+                    subtitle.textContent += originalText.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingEffect);
+                }
+            }, 60);
+            
+            setInterval(() => {
+                const cards = document.querySelectorAll('.program-card');
+                cards.forEach(card => {
+                    card.style.animationDuration = `${Math.random() * 2 + 4}s`;
+                });
+            }, 5000);
+        }
+        
+        function createStars() {
+            const container = document.getElementById('stars-container');
+            const starCount = 100;
+            
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.left = Math.random() * 100 + 'vw';
+                star.style.top = Math.random() * 100 + 'vh';
+                star.style.width = (Math.random() * 3 + 1) + 'px';
+                star.style.height = star.style.width;
+                star.style.animationDelay = Math.random() * 2 + 's';
+                star.style.opacity = Math.random() * 0.5 + 0.1;
+                container.appendChild(star);
+            }
+        }
+        
+        function createFloatingElements() {
+            const container = document.getElementById('floating-container');
+            const elementCount = 15;
+            const symbols = ['✧', '♥', '✺', '♡', '✷', '♥', '✵'];
+            
+            for (let i = 0; i < elementCount; i++) {
+                const element = document.createElement('div');
+                element.className = 'floating-element';
+                element.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                element.style.left = Math.random() * 100 + 'vw';
+                element.style.top = Math.random() * 100 + 'vh';
+                element.style.fontSize = (Math.random() * 1 + 0.8) + 'rem';
+                element.style.animationDelay = Math.random() * 5 + 's';
+                element.style.animationDuration = (Math.random() * 6 + 6) + 's';
+                container.appendChild(element);
+            }
+        }
+    </script>
+</body>
+</html>

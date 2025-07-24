@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 Promesas de Amor para Yazmín</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Dancing+Script:wght@700&family=EB+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vino: #6d0d3a;
+            --morado-oscuro: #3a0d3a;
+            --dorado: #d4af37;
+            --negro-elegante: #1a1a1a;
+            --bordo: #800020;
+            --rojo-pasion: #d23669;
+            --texto-claro: #f0e6d2;
+        }
+        
+        body {
+            font-family: 'EB Garamond', serif;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+            background: var(--negro-elegante);
+            color: var(--texto-claro);
+            background-image: url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        .overlay {
+            background-color: rgba(10, 5, 10, 0.85);
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+        }
+        
+        h1 {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 3.5rem;
+            margin: 20px 0;
+            color: var(--dorado);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        h1::before, h1::after {
+            content: "♥";
+            color: var(--rojo-pasion);
+            margin: 0 15px;
+            font-size: 1.8rem;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .promesa-card {
+            background: linear-gradient(135deg, rgba(109, 13, 58, 0.8) 0%, rgba(58, 13, 58, 0.8) 100%);
+            border-radius: 10px;
+            width: 180px;
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--dorado);
+            padding: 15px;
+        }
+        
+        .promesa-card:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 25px rgba(210, 54, 105, 0.5);
+            border-color: var(--rojo-pasion);
+        }
+        
+        .promesa-card .number {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2em;
+            font-weight: bold;
+            color: var(--dorado);
+            transition: all 0.4s;
+            position: absolute;
+        }
+        
+        .promesa-card .text {
+            opacity: 0;
+            font-size: 1em;
+            color: var(--texto-claro);
+            transition: all 0.4s;
+            transform: scale(0.8);
+            text-align: center;
+            line-height: 1.4;
+        }
+        
+        .promesa-card.active .number {
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .promesa-card.active .text {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        /* Corazones flotantes */
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        .heart {
+            position: absolute;
+            opacity: 0;
+            color: var(--rojo-pasion);
+            animation: float 6s ease-in infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* Mensaje final */
+        .final-message {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(109, 13, 58, 0.95);
+            z-index: 1000;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            animation: fadeIn 1s;
+        }
+        
+        .final-message h2 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--dorado);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        
+        .final-message p {
+            font-size: 1.8rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            line-height: 1.5;
+        }
+        
+        .close-btn {
+            background: var(--dorado);
+            color: var(--vino);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Cinzel Decorative', cursive;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .close-btn:hover {
+            transform: scale(1.1);
+            background: #e6c260;
+        }
+        
+        /* Divider decorativo */
+        .divider {
+            width: 50%;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--dorado), transparent);
+            margin: 2rem auto;
+        }
+        
+        /* Efecto de brillo dorado */
+        .gold-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .gold-glow::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -60%;
+            width: 40%;
+            height: 200%;
+            background: linear-gradient(
+                to right,
+                rgba(212, 175, 55, 0) 0%,
+                rgba(212, 175, 55, 0.2) 50%,
+                rgba(212, 175, 55, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 6s infinite;
+        }
+        
+        @keyframes shine {
+            0% { left: -60%; }
+            20% { left: 120%; }
+            100% { left: 120%; }
+        }
+        
+        /* Fuegos artificiales */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px 2px;
+            animation: explode 1s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes explode {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--x), var(--y)); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="floating-hearts" id="hearts-container"></div>
+        
+        <div class="gold-glow">
+            <h1>100 Promesas de Amor para Yazmín</h1>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="container" id="container">
+            <!-- Las tarjetas se generarán con JavaScript -->
+        </div>
+        
+        <div class="final-message" id="finalMessage">
+            <h2>Mi Promesa Eterna</h2>
+            <p>Cada una de estas promesas es un juramento de mi corazón...<br>Prometo cumplirlas todas mientras viva ❤️</p>
+            <button class="close-btn" id="closeBtn">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        // Lista de 100 promesas de amor con corazones
+        const promesas = [
+            "1. Prometo cuidarte siempre ❤️",
+            "2. Prometo abrazarte fuerte ❤️",
+            "3. Prometo decirte te amo ❤️",
+            "4. Prometo estar contigo ❤️",
+            "5. Prometo hacerte reír ❤️",
+            "6. Prometo no soltarte ❤️",
+            "7. Prometo respetarte ❤️",
+            "8. Prometo escucharte ❤️",
+            "9. Prometo apoyarte ❤️",
+            "10. Prometo protegerte ❤️",
+            "11. Prometo valorarte ❤️",
+            "12. Prometo darte paz ❤️",
+            "13. Prometo caminar contigo ❤️",
+            "14. Prometo no juzgarte ❤️",
+            "15. Prometo admirarte ❤️",
+            "16. Prometo serte fiel ❤️",
+            "17. Prometo pensar en ti ❤️",
+            "18. Prometo cuidarte más ❤️",
+            "19. Prometo elegirte siempre ❤️",
+            "20. Prometo no rendirme ❤️",
+            "21. Prometo confiar en ti ❤️",
+            "22. Prometo darte mi tiempo ❤️",
+            "23. Prometo abrazarte en tus miedos ❤️",
+            "24. Prometo apoyarte en todo ❤️",
+            "25. Prometo amarte sin medida ❤️",
+            "26. Prometo no lastimarte ❤️",
+            "27. Prometo no mentirte ❤️",
+            "28. Prometo hacerte feliz ❤️",
+            "29. Prometo no fallarte ❤️",
+            "30. Prometo ser tu refugio ❤️",
+            "31. Prometo darte fuerza ❤️",
+            "32. Prometo cuidarte en todo ❤️",
+            "33. Prometo amarte en los malos días ❤️",
+            "34. Prometo no soltarte jamás ❤️",
+            "35. Prometo crecer contigo ❤️",
+            "36. Prometo perdonarte ❤️",
+            "37. Prometo no dejarte sola ❤️",
+            "38. Prometo darte besos ❤️",
+            "39. Prometo sorprenderte ❤️",
+            "40. Prometo regalarte amor ❤️",
+            "41. Prometo confiar en nosotros ❤️",
+            "42. Prometo hacerte sentir especial ❤️",
+            "43. Prometo reír contigo ❤️",
+            "44. Prometo cuidarte cuando estés mal ❤️",
+            "45. Prometo abrazarte sin razón ❤️",
+            "46. Prometo mirar por ti ❤️",
+            "47. Prometo no olvidarte ❤️",
+            "48. Prometo dedicarte canciones ❤️",
+            "49. Prometo esperarte ❤️",
+            "50. Prometo sanar contigo ❤️",
+            "51. Prometo cuidarte en mis pensamientos ❤️",
+            "52. Prometo llamarte mi hogar ❤️",
+            "53. Prometo darte calor ❤️",
+            "54. Prometo no gritarte ❤️",
+            "55. Prometo darte lo mejor ❤️",
+            "56. Prometo estar incluso en silencio ❤️",
+            "57. Prometo abrazarte por las noches ❤️",
+            "58. Prometo amarte como el primer día ❤️",
+            "59. Prometo no dejarte llorar sola ❤️",
+            "60. Prometo compartir mi vida contigo ❤️",
+            "61. Prometo confiar en tu amor ❤️",
+            "62. Prometo ser tu apoyo ❤️",
+            "63. Prometo respetar tu espacio ❤️",
+            "64. Prometo no olvidarme de ti ❤️",
+            "65. Prometo estar en cada paso ❤️",
+            "66. Prometo darte mi todo ❤️",
+            "67. Prometo no dejar de amarte ❤️",
+            "68. Prometo mirarte con amor ❤️",
+            "69. Prometo decirte lo hermosa que eres ❤️",
+            "70. Prometo celebrar tus logros ❤️",
+            "71. Prometo no alejarme ❤️",
+            "72. Prometo cuidar tus lágrimas ❤️",
+            "73. Prometo hacerte sentir segura ❤️",
+            "74. Prometo tomarte de la mano ❤️",
+            "75. Prometo estar orgulloso de ti ❤️",
+            "76. Prometo darte paz mental ❤️",
+            "77. Prometo caminar juntos ❤️",
+            "78. Prometo enseñarte lo bueno ❤️",
+            "79. Prometo cuidar tus emociones ❤️",
+            "80. Prometo que siempre serás mi prioridad ❤️",
+            "81. Prometo respetar tus decisiones ❤️",
+            "82. Prometo ayudarte a cumplir tus metas ❤️",
+            "83. Prometo no olvidarme de los detalles ❤️",
+            "84. Prometo no herirte con palabras ❤️",
+            "85. Prometo cuidarte como a mí ❤️",
+            "86. Prometo mirar el futuro contigo ❤️",
+            "87. Prometo ser tu apoyo en todo ❤️",
+            "88. Prometo darte amor puro ❤️",
+            "89. Prometo no rendirme por nada ❤️",
+            "90. Prometo no dejar de soñar contigo ❤️",
+            "91. Prometo abrazarte con el alma ❤️",
+            "92. Prometo mirar siempre por lo nuestro ❤️",
+            "93. Prometo darte mi lealtad ❤️",
+            "94. Prometo dar lo mejor de mi ❤️",
+            "95. Prometo recordarte cuánto te amo ❤️",
+            "96. Prometo no fallarte en lo pequeño ❤️",
+            "97. Prometo darte razones para quedarte ❤️",
+            "98. Prometo ser tu calma ❤️",
+            "99. Prometo no dejar que dudes de mi amor ❤️",
+            "100. Prometo amarte por siempre ❤️"
+        ];
+
+        // Generar las tarjetas de promesas
+        const container = document.getElementById('container');
+        
+        promesas.forEach((promesa, index) => {
+            const card = document.createElement('div');
+            card.className = 'promesa-card';
+            card.innerHTML = `
+                <div class="number">${index + 1}</div>
+                <div class="text">${promesa.split('. ')[1]}</div>
+            `;
+            
+            card.addEventListener('click', () => {
+                card.classList.toggle('active');
+                createHearts(2);
+                
+                // Mostrar mensaje final al clickear la promesa 100
+                if (index === 99) {
+                    document.getElementById('finalMessage').style.display = 'flex';
+                    createFireworks(30);
+                }
+            });
+            
+            container.appendChild(card);
+        });
+        
+        // Crear corazones flotantes
+        function createHearts(count) {
+            const container = document.getElementById('hearts-container');
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '♥';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = Math.random() * 100 + 'vh';
+                heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+                heart.style.animationDuration = (Math.random() * 4 + 3) + 's';
+                heart.style.animationDelay = Math.random() * 2 + 's';
+                container.appendChild(heart);
+            }
+        }
+        
+        // Crear fuegos artificiales
+        function createFireworks(count) {
+            const colors = ['#ff0000', '#ff69b4', '#ff8c00', '#ffd700', '#9370db'];
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const firework = document.createElement('div');
+                    firework.className = 'firework';
+                    firework.style.left = Math.random() * 100 + 'vw';
+                    firework.style.top = Math.random() * 100 + 'vh';
+                    firework.style.color = colors[Math.floor(Math.random() * colors.length)];
+                    firework.style.setProperty('--x', (Math.random() - 0.5) * 200 + 'px');
+                    firework.style.setProperty('--y', (Math.random() - 0.5) * 200 + 'px');
+                    document.body.appendChild(firework);
+                    
+                    setTimeout(() => {
+                        firework.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+        
+        // Cerrar mensaje final
+        document.getElementById('closeBtn').addEventListener('click', () => {
+            document.getElementById('finalMessage').style.display = 'none';
+        });
+        
+        // Inicializar corazones al cargar
+        window.onload = function() {
+            createHearts(20);
+            
+            // Efecto de escritura para el título
+            const title = document.querySelector('h1');
+            const originalText = title.textContent;
+            title.textContent = '';
+            
+            let i = 0;
+            const typingEffect = setInterval(() => {
+                if (i < originalText.length) {
+                    title.textContent += originalText.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typingEffect);
+                }
+            }, 100);
+        };
+    </script>
+</body>
+</html>
